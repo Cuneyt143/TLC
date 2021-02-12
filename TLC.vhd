@@ -33,15 +33,15 @@ signal delay_count: std_logic_vector(3 downto 0):= x"0";
 signal delay_6s, delay_2s_H, YELLOW_LIGHT_ENABLE, GREEN_LIGHT_ENABLE: std_logic:='0';
 signal clk_1s_enable: std_logic; -- 1s clock enable 
 type FSM_States is (IDLE,s1,s2,s3,s4,s5, s6, s7, s8, s9);
--- IDLE : All lights red
--- s1 : T1 and T3 yellow, others red
--- s2 : T1 and T3 green, others red
--- s3 : T1 and T3 yellow, others red
--- s4 : T2 and T4 green, others red
--- s5 : T5 and T7 yellow, others red
--- s6 : T5 and T7 green, others red
--- s7 : T5 and T7 yellow, others red
--- s8 : T6 and T8 green, others red
+-- IDLE : Bütün ışıklar kırmızı
+-- s1 : T1 ve T3 sarı, diğerleri kırmızı
+-- s2 : T1 ve T3 yeşil, diğerleri kırmızı
+-- s3 : T1 ve T3 sarı, diğerleri kırmızı
+-- s4 : T2 ve T4 yeşil, diğerleri kırmızı
+-- s5 : T5 ve T7 sarı, diğerleri kımızı
+-- s6 : T5 ve T7 yeşil, diğerleri kırmızı
+-- s7 : T5 ve T7 sarı, diğerleri kırmızı
+-- s8 : T6 ve T8 yeşil, diğerleri kırmızı
 signal current_state, next_state: FSM_States;
 
 begin
@@ -60,8 +60,7 @@ begin
 case current_state is
 when IDLE => 
   GREEN_LIGHT_ENABLE <= '0'; --Pasif : yeþil ýþýk bekleme sayacý
-  YELLOW_LIGHT_ENABLE <= '0';-- Pasif : sarý ýþýk bekleme sayacý 
-  --YELLOW_LIGHT2_ENABLE <= '0';-- disable YELLOW light Farmway delay counting
+  YELLOW_LIGHT_ENABLE <= '0';-- Pasif : sarý ýþýk bekleme sayacý
   T1 <= "100"; -- Red lights on(all)
   T2 <= "10";
   T3 <= "100";
@@ -242,12 +241,12 @@ if(clk_1s_enable='1') then
  end if;
 end if;
 end process;
-
+--Clock Divider
 process(clk)
 begin
 if(rising_edge(clk)) then 
  counter_1s <= counter_1s + x"0000001";
- if(counter_1s >= x"0000003") then -- x"0004" is for simulation
+ if(counter_1s >= x"0000003") then 
  -- change to x"2FAF080" for 50 MHz clock running real FPGA 
   counter_1s <= x"0000000";
  end if;
